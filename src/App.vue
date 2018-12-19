@@ -23,9 +23,6 @@
     import {AgGridVue} from "ag-grid-vue";
     import TradeCellRenderer from "./components/TradeCellRenderer";
 
-    import '../node_modules/ag-grid-community/dist/styles/ag-grid.css'
-    import '../node_modules/ag-grid-community/dist/styles/ag-theme-balham.css'
-
     export default {
         name: 'App',
         data() {
@@ -71,7 +68,10 @@
     }
 </script>
 
-<style scoped>
+<style lang="css" scoped>
+    @import '~ag-grid-community/dist/styles/ag-grid.css';
+    @import '~ag-grid-community/dist/styles/ag-theme-balham.css';
+
     .exchange {
         margin-bottom: 10px;
     }
