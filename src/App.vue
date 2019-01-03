@@ -8,7 +8,7 @@
                 </option>
             </select>
         </div>
-        <ag-grid-vue style="width: 500px; height: 500px;"
+        <ag-grid-vue style="width: 500px; height: 300px;"
                      class="ag-theme-balham"
                      :columnDefs="columnDefs"
                      :rowData="rowData"
