@@ -45,6 +45,10 @@ export default new Vuex.Store({
                 state.cumulativeTrades.filter(trade => trade.exchange === exchange)
     },
     mutations: {
+        cumulativeTradesForExchange(state, {exchange, cumulativeTrades}) {
+            state.cumulativeTrades =
+                state.cumulativeTrades.filter(trade => trade.exchange !== exchange).concat(cumulativeTrades);
+        },
         setCurrentExchange(state, exchange) {
             state.currentExchange = exchange;
         },
@@ -62,6 +66,9 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        cumulativeTradesForExchange({commit}, {exchange, cumulativeTrades}) {
+            commit('cumulativeTradesForExchange', {exchange, cumulativeTrades});
+        },
         setCurrentExchangeAsync({commit}, exchange) {
             setTimeout(() => {
                 commit('setCurrentExchange', exchange)

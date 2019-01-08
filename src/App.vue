@@ -11,11 +11,13 @@
         <ag-grid-vue style="width: 500px; height: 300px;"
                      class="ag-theme-balham"
                      :columnDefs="columnDefs"
-                     :rowData="rowData"
+                     v-model="rowData"
+                     deltaRowMode
+                     getRowid
                      :components="components"
+                     @data-model-changed="dataModelUpdated"
                      @first-data-rendered="onFirstDataRendered">
         </ag-grid-vue>
-
     </div>
 </template>
 
@@ -30,7 +32,8 @@
                 columnDefs: [
                     {
                         field: 'trader',
-                        sort: 'asc'
+                        sort: 'asc',
+                        editable: true
                     },
                     {
                         headerName: 'Total Amount',
@@ -45,12 +48,8 @@
                 currentExchange: null,
                 components: {
                     TradeCellRenderer
-                }
-            }
-        },
-        computed: {
-            rowData() {
-                return this.$store.getters.tradesForExchange(this.currentExchange.exchange);
+                },
+                rowData: null
             }
         },
         components: {
@@ -60,9 +59,34 @@
         beforeMount() {
             this.currentExchange = this.$store.state.exchanges[0];
         },
+        mounted() {
+            this.rowData = Object.freeze(
+                this.copyRowData(this.$store.getters.tradesForExchange(this.currentExchange.exchange))
+            );
+        },
+        watch: {
+            currentExchange() {
+                this.rowData = Object.freeze(
+                    this.copyRowData(this.$store.getters.tradesForExchange(this.currentExchange.exchange))
+                );
+           }
+        },
         methods: {
+            dataModelUpdated(rowData) {
+                this.$store.dispatch('cumulativeTradesForExchange', {
+                    exchange: this.currentExchange.exchange,
+                    cumulativeTrades: rowData
+                });
+            },
             onFirstDataRendered(params) {
                 params.api.sizeColumnsToFit();
+            },
+            copyRowData(data) {
+                return data.map(datum => {
+                    return {
+                        ...datum
+                    }
+                })
             }
         }
     }
