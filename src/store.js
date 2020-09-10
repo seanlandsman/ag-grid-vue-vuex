@@ -66,6 +66,9 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        executeTrade(context) {
+            console.log("here...");
+        },
         cumulativeTradesForExchange({commit}, {exchange, cumulativeTrades}) {
             commit('cumulativeTradesForExchange', {exchange, cumulativeTrades});
         },
